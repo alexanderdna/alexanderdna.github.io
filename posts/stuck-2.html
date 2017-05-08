@@ -1,0 +1,274 @@
+<html>
+    <head>
+        <title> Bốn kiểu bế tắc | Blog</title>
+        <meta charset="utf-8">
+        <meta http-equiv="content-type" content="text/html;"><meta name=viewport content="initial-scale=1.0 maximum-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext,vietnamese" rel="stylesheet">
+        <link href="../css/theme.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/highlight/tomorrow-night.css">
+        <link rel="stylesheet" href="../css/fontello.css">
+        <script src="../js/highlight.pack.js"></script>
+        <script>
+        hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <a href="/"><i class="icon icon-emo-coffee"></i> anhdang.dev.blog</a>
+        </div>
+        <div class="container">
+            <div class="main">
+                <h1 id="b-n-ki-u-b-t-c">Bốn kiểu bế tắc</h1>
+<p><em>Bài gốc của <strong>Jeff Wofford</strong>: <a href="http://www.jeffwofford.com/?p=838">Four Kinds of
+Stuck</a></em></p>
+<p>Kẻ thù lớn nhất của lập trình viên là sự bế tắc. Năng suất của bạn giảm sút khi
+bạn lâm vào bế tắc. Tệ hơn nữa, nó ảnh hưởng tới niềm vui, sự tự tin và tinh
+thần của bạn. Thành thử một kỹ năng cốt yếu khi muốn trở thành lập trình viên
+thượng thặng là biết cách tránh bị bế tắc, nhận ra nó và thoát khỏi nó.</p>
+<p>Một trong các cách giúp tôi tránh bế tắc lẫn thoát khỏi nó là hiểu rõ các thể
+loại của nó.</p>
+<h2 id="th-ng-su-t-kh-ng-b-t-c">Thông suốt không bế tắc</h2>
+<p>Để hiểu được làm sao bạn bế tắc, trước hết phải biết nếu không bế tắc thì sẽ thế
+nào. Không bế tắc là khi bạn lập trình một cái gì đó bạn hiểu – hoặc bạn nghĩ là
+bạn hiểu – một cách khá rõ.</p>
+<p>Thí dụ, có người yêu cầu bạn làm giao diện đồ họa nhè nhẹ cho một trò chơi. Nó
+sẽ cần có trình đơn chính, có nút &quot;Continue&quot;, &quot;Options&quot; và cả nút &quot;Credits&quot; thân
+mến. Giao diện còn phải có một thanh năng lượng, một màn hình tóm lượt và một
+nút công cụ kích hoạt mau trong trò chơi (?ND). Quả là một mớ việc thú vị.</p>
+<p>Thế là bây giờ bạn sắn tay áo lên và nghĩ, &quot;Rồi, có thể là một lớp Window – mà
+thôi, &#39;Window&#39; nghe trịnh trọng và cũ xì. Tôi sẽ gọi nó là &#39;Widget&#39; – về căn bản
+nó là một hình tứ giác vẽ lên được. Và ta có một lớp nút bấm kế thừa từ đó. Tôi
+sẽ cần nhận biết thao tác nhập và click chuột. Sẽ có nhiều trạng thái cho cái
+nút. Có thể tráo đổi hình ảnh trên nút liền tức thì.&quot; Và cứ vậy cả khối óc của
+bạn chạy rần rần! Thiết kế và tưởng tượng, xem xét chọn lựa, hình dung coi nó sẽ
+ra sao. Bạn sửa soạn tạo ra giao diện đồ họa ngầu đời nhất!</p>
+<p>Bạn đang <em>thông suốt không bế tắc</em>. Nếu bạn có một ít kỹ năng thiết kế, khá quen
+thuộc với cách vận hành của giao diện đồ họa (bạn quen chứ hả?), và các ý niệm
+rõ ràng về đồ họa, hình ảnh, thao tác chuột, bạn hoàn toàn yên tâm mà làm. Không
+gì cản được bạn. Bạn đang lập trình!</p>
+<p>Đây chính là việc lập trình ở mức độ tốt nhất. Gặp một vấn đề thử thách – nhưng
+không quá khó – với các khái niệm rõ ràng và có không gian sáng tạo. Đây là lý
+do chúng ta đam mê lập trình.</p>
+<p>Bạn đang kiểm soát tình hình. Không có việc vặt vãnh nào làm bạn sa lầy. Không
+phải mỏi mòn chờ tải cái này cái kia, hay khởi động lại hệ thống nhiều lần. Chỉ
+có bạn cùng với trình biên tập và <code>class Widget... class Button extends
+Widget...</code></p>
+<p>Thông suốt không bế tắc. Đây là trường hợp chúng ta mong đợi. Nhưng hỡi ôi,
+không phải lúc nào ta cũng đạt được. (Người nào luôn đạt được thì có lẽ không
+phải <em>&quot;Lập trình viên thứ thiệt.&quot;</em>) Chúng ta sẽ phải đối diện với thực tế phũ
+phàng của những bộ công cụ, những con bọ lỗi và mớ API kỳ khôi của thiên hạ.</p>
+<h2 id="b-t-c-trong-ng-r-c">Bế tắc trong đống rác</h2>
+<p>Đây là loại bế tắc đầu tiên. Bế tắc trong đống rác xảy ra khi bạn gặp phải một
+vấn đề chẳng mấy khó – chỉ là không biết làm sao tiến hành.</p>
+<p>Tôi chuyển qua xài máy Mac cách đây vài năm, và phải đào xới lại những kiến thức
+về Unix bấy lâu đã bị chôn vùi. Thế là tôi ngồi đó, trước mặt là cửa sổ dòng
+lệnh, và tôi kiếm cách liệt kê ra các tập tin trong một thư mục theo trình tự
+thời gian.</p>
+<p>Ồ, tôi biết là với bạn thì việc đó dễ ợt. Bạn xài Unix giỏi và bạn đã làm việc
+này hàng ngàn lần. Và chắc chắn là tôi biết phải gõ <code>ls</code>. Nhưng cần thêm tham số
+gì để lệnh <code>ls</code> sắp xếp kết quả theo ngày tháng?</p>
+<p>Thế là tôi gõ <code>man ls</code>. Ngay lập tức, một trang văn bản xấu hoắc đập vô mắt tôi,
+với hàng tá thứ bùa chú cho lệnh ls. Giờ tôi phải cực khổ dò suốt mớ chữ
+<em>monospace</em> để tìm xem có gì liên quan tới ngày tháng không. (Vâng, tôi biết là
+có một bộ đọc trang <em>man</em> dễ coi hơn. Tôi đã không bận tâm cài một cái. Mà ở đây
+tôi cũng đang minh họa thôi.) Nó không có ở trang đầu, vậy nên tôi phải cuộn
+xuống bằng kiểu cuộn hồi 1974, tiếp tục trợn con mắt tìm chữ <code>date</code>.</p>
+<p>À há! Nó đây rồi, nằm ở trang thứ ba. Tôi sẽ xài tham số <code>-t</code>. Tuyệt vời! Thế là
+tôi đóng trình man và thử gõ <code>ls –lt</code>. Á! Chết dở, tôi muốn sắp xếp theo thứ tự
+ngược lại.</p>
+<p>Vậy giờ tôi lại phải mở man lên và lại banh mắt tìm kiếm. Ôi thây kệ nó, mệt
+ghê. Sao không chơi một màn Robot Unicorn Attack cho nó sướng?</p>
+<p>Trên đây là một trường hợp bình thường, và thật sự phiền toái. Nhưng nó là ví dụ
+cho một hiện tượng lớn vốn thường quấy rầy các lập trình viên. Bạn cố gắng làm
+cho xong công chuyện. Và bạn thích công chuyện đó – có thể là một bộ hiệu ứng
+particle system mãn nhãn. Song trong lúc thực hiện, bạn lại vấp phải một tảng đá
+cản đường – một công cụ nào đó (như <code>ls</code>) không làm việc theo cái cách bạn muốn,
+hoặc một hàm API nào đó cứ trả về lỗi miết. Rốt cuộc bạn lê lết cố chui khỏi mớ
+bòng bong. Các tài liệu. Các bài viết cũ kỹ trên usenets. Nếu bạn hên thì có thể
+là một cuộc thảo luận trên Stack Overflow. Vào những ngày đặc biệt tệ hại, kết
+quả tìm kiếm trên Google chẳng đi đến đâu, và bạn cứ cặm cụi tìm đi tìm lại,
+không thể tin rằng cả cái vũ trụ này lại ngốc nghếch như vậy, và rằng thì là sau
+cùng bạn hẳn sẽ tìm thấy một cái gì đó.</p>
+<p>Bạn bị bế tắc. Nhưng không phải vì bạn gặp vấn đề quá khó. Bạn bế tắc vì giải
+pháp thật khó nhìn ra. Để vượt qua trở ngại, bạn phải đọc nhiều thứ, gạn lọc ra
+nhiều thứ từ một mớ hỗn độn. Bạn bị bế tắc trong một đống rác.</p>
+<p>Bạn không thể tránh tình trạng bế tắc này. À vâng – một số API được thiết kế rất
+dở, các hàm và tham số tối nghĩa tới nỗi phải tụng nguyên bộ tài liệu mới mong
+hiểu nỗi đoạn code sẽ làm gì. Tôi luôn cho rằng API của Microsoft, đặc biệt là
+Win32, thuộc loại đặc biệt kỳ khôi và thất thường. Hoặc xét các thư viện âm
+thanh. Tôi thích OpenAL, nhưng người ta đặt tên hàm rất tệ và chúng trả về toàn
+những giá trị điên điên. Ngược lại, Fmod tuy không miễn phí nhưng lại là một bộ
+API tốt hơn.</p>
+<p>Vậy nên, nếu có thể, hãy tránh các bộ API xấu xí và tìm các bộ tốt hơn. Nhưng
+như vậy cũng không hoàn toàn tránh khỏi bị bế tắc trong mớ bòng bong được. Điều
+cốt lõi khi muốn giải quyết nó là làm sao thoát ra khỏi nó.</p>
+<p>Phương pháp thoát khỏi mớ bòng bong lại thuộc về một bài viết khác. Song sau đây
+là mấy điều căn bản:</p>
+<ul>
+<li>Khi đang đọc tài liệu thì hãy tập trung. Hãy học cách đọc những cái cần đọc và
+đúc kết những cái cần đúc kết.</li>
+<li>Học cách tìm kiếm. Bằng Google, phải, nhưng bằng IDE nữa. Tôi ngạc nhiên khi
+thấy có quá trời lập trình viên thà lặn hụp trong từng trang code của họ thay vì
+đơn giản là dùng lệnh <em>Find in Files</em> hoặc trình <em>grep</em>.</li>
+<li>Bất cứ lúc nào có thể, đừng chong mắt tìm kiếm. (Thật xấu hổ cho tôi khi xài
+man mà không biết cách gõ lệnh tìm kiếm.)</li>
+<li>Thường xuyên tìm trong Stack Overflow. Đó là thứ tốt nhất mà các lập trình
+viên có được bao năm qua.</li>
+</ul>
+<p>Và thêm một điều nữa. Hãy đặt khung thời gian. Nếu bạn tìm kiếm giải pháp quá ba
+mươi phút, có lẽ đã tới lúc chuyển qua hướng giải quyết khác. Nói chung đó là
+một cách tốt để thoát khỏi bế tắc. Đừng cắm cúi theo đuổi mãi một chiến lược.
+Làm cách này hoài không được thì làm cách khác.</p>
+<h2 id="b-t-c-v-kh-i-ni-m">Bế tắc vì khái niệm</h2>
+<p>Ồ, cái này còn chua ăn hơn. Một lập trình viên bị bế tắc vì khái niệm là khi
+người đó không phải thiếu dữ kiện, mà thiếu khái niệm. Khi đó bạn không chỉ
+không biết câu trả lời, bạn còn chẳng hình dung được câu hỏi nó ra làm sao.</p>
+<p>Một ví dụ phổ biến của vấn đề này trong trường hợp ngôn ngữ C++ là về con trỏ.
+Nhiều sinh viên nhập môn của tôi ở Guildhall có nền tảng là các ngôn ngữ như
+Java hay C#. Trong mấy ngôn ngữ đó, con trỏ ẩn sau các tham chiếu, và bộ thu gom
+rác chịu trách nhiệm giải quyết các vấn đề như rò rỉ bộ nhớ hay các con trỏ đu
+đưa (trỏ tới phần bộ nhớ đã trả lại hệ thống – ND). Nhiều khi tôi bắt gặp mã
+lệnh thế này.</p>
+<pre><code class="lang-c++">string reverse(string s)
+{
+    string *copy = new string;
+    // ... đảo chuỗi s và lưu vô copy
+    return *copy;
+}
+</code></pre>
+<p>Nó làm tôi sợ xanh mang. Cái chỗ rùng rợn nhất trong đoạn code trên là biểu thức
+nho nhỏ new string – vốn vô hại trong Java hoặc C#, lại thật tà đạo trong C++.
+Nhưng bạn hỏi, tà đạo cỡ nào?</p>
+<p>Thí dụ bạn xài đoạn code này trong một trò chơi mà bạn đang làm. Rồi sau đó lập
+trình viên trưởng đến gặp và nói với bạn, <em>&quot;Tụi tôi thấy bản build mới đây bị rò
+rỉ bộ nhớ. Tụi này không biết do cái gì gây ra, nhưng hình như nó nằm trong phần
+cập nhật của bạn. Bạn coi thử coi sao.&quot;</em> Thế là bạn bắt đầu đào bới xới lung
+tung.</p>
+<p>Giờ, nếu bạn còn làm theo kiểu Java hay C#, có thể bạn còn chẳng hiểu rò rỉ bộ
+nhớ là cái giống gì. Nhưng cứ coi như bạn hiểu đi. Vậy làm cách nào bạn tìm ra
+đoạn rò rỉ? Bạn phải tìm ở chỗ nào? Bạn dùng công cụ gì để tìm?</p>
+<p>Cứ coi như bạn khám phá ra là bộ nhớ bị rò rỉ ở đâu đó trong cái hàm này. Vậy
+tại sao nó xảy ra ở đây? Dòng mã nào gây ra? Sửa bằng cách nào?</p>
+<p>Là một lập trình viên, khi bạn đối đầu với một vấn đề gay go thế này mà lại
+không hiểu được hệ thống bên dưới mần ăn ra làm sao (trong trường hợp này là quy
+trình cấp phát bộ nhớ), bạn sẽ lạc lối. Bạn sẽ mất nhiều giờ, thậm chí nhiều
+ngày, tìm kiếm vấn đề và giải pháp trong khi một lập trình viên biết anh ta đang
+làm gì có thể tìm ra và giải quyết trong phút chốc. Đó là một sự bế tắc xấu xí
+và khốn khổ. Và người lập trình nào mắc trong tình trạng như vậy năm ba bữa một
+tuần sẽ nhanh chóng hết ưa nổi công việc mình làm. Vui sao được khi có cảm tưởng
+rằng đoạn code của chính bạn lại đang giỡn mặt với bạn, len lén dán lên lưng bạn
+tấm giấy ghi chữ &quot;Hãy đạp tôi một phát!&quot;</p>
+<p>Tôi biết có nhiều lập trình viên mới học C++ bỏ ra nhiều giờ liền đối mặt với
+lỗi &quot;duplicate symbol&quot; (danh biểu bị trùng – ND) báo từ trình linker do họ không
+biết chỉ thị #pragma once dùng để làm gì. Chắc hẳn với người lập trình PHP thì
+nó cứ như thần chú, nhưng lập trình C và C++ thì phải biết trình biên dịch và
+trình liên hợp vận hành như thế nào – chẳng hạn để tránh đặt các tập tin header
+quá một lần trong một đơn vị mã biên dịch.</p>
+<p>Cốt lõi là trong bất cứ lãnh vực nào cũng đều có những khái niệm căn bản mà bạn
+không thể không biết. Có thể trong nhất thời bạn không cần chúng, nhưng sau rốt
+bạn phải nắm bắt chúng. Nhược bằng không, rồi sẽ có lúc bạn đương đầu với những
+rắc rối mà sau đó trở thành cơn ác mộng bí hiểm đối với bạn. Đó là lúc bạn biết
+bạn đang bế tắc vì khái niệm.</p>
+<p>Bi kịch của việc bế tắc vì khái niệm là bạn hầu như không hiểu tại sao mình bế
+tắc hoặc thậm chí không biết mình đang bế tắc. Nếu bạn không có những tri thức
+cần thiết để giải quyết vấn đề, có khi bạn cũng không có tri thức cần thiết để
+nhận ra là đang có vấn đề. Có một tình trạng mù mờ liên quan tới sự bế tắc vì
+khái niệm.</p>
+<p>Các nhà tâm lý học gọi nó là <em>four stages of competence</em> (bốn mức độ năng lực –
+ND). Ở mức thấp nhất, bạn không biết một cái gì đó và thậm chí không nhận thấy
+rằng bạn không biết. Ở một mức cao hơn chút, bạn không biết nhưng ít ra bạn thấy
+được điều đó. Bị bế tắc vì khái niệm tức là đang ở một trong các mức đó. Cách
+duy nhất để hết bị là làm sao tiến lên mức cao nhất: biết và biết rằng mình
+biết.</p>
+<p>Học hỏi là cách để khỏi bị bế tắc vì khái niệm. Ở đây, sự tập luyện và những
+kinh nghiệm đơn thuần sẽ không giúp được bạn. Bạn phải học thực sự – đọc, thảo
+luận, lắng nghe, suy nghĩ. Bạn có thể xài <em>std::vectors</em> trong suốt năm năm trời
+nhưng lại chưa bao giờ biết người ta cấp phát bộ nhớ và khởi tạo cho các phần tử
+trong đó bằng cách nào. Không có sự hiểu biết đó, bạn có thể làm được vài việc
+tốt, nhưng cũng có thể làm ra nhiều chuyện tai hại... Bạn có thể làm đổi độ dài
+vector trong khi đáng lẽ phải reserve(), đặt phần tử lên đầu thay vì
+push_back(), truyền theo giá trị dù đúng ra là phải theo tham chiếu.</p>
+<p>Giờ nếu bạn đang bế tắc vì khái niệm, làm sao để thoát ra? Câu trả lời cũng như
+vậy. Phải học. Tôi khuyên bạn làm theo ba bước sau:</p>
+<p>Tránh xa khỏi code. Hít một hơi. Cầm sách lên đọc.</p>
+<h2 id="-n-gi-n-l-b-t-c">Đơn giản là bế tắc</h2>
+<p>Loại bế tắc tồi tệ nhất xảy ra khi thực sự không có cách gì để tiến tới – khi
+không có một giải pháp nào. Như ở Maine người ta ưa nói, <em>&quot;Từ đây không thể đi
+qua đó được.&quot;</em></p>
+<p>Điều này ít khi xảy ra khi lập trình. Trong cương vị người sản xuất game và quản
+trị dự án, tôi thường nghe các lập trình viên than phiền về một việc họ không ưa
+hoặc không tự tin thực hiện. Họ nói <em>&quot;Không thể làm được, chuyển cái engine từ
+OpenGL qua DirectX đơn giản là bất khả thi.&quot;</em></p>
+<p>Tôi trả lời, <em>&quot;Ồ thôi nào, nếu tôi cho anh một năm để làm thì sao?&quot;</em></p>
+<p><em>&quot;Ờ, được, một năm thì được.&quot;</em></p>
+<p><em>&quot;À vậy thì nó cũng đâu phải bất khả thi hỉ?&quot;</em> tôi nói, và cười một cách bá đạo.</p>
+<p>Thật lòng mà nói thì khi lập trình, chẳng có mấy chuyện là bất khả thi. Chỉ là
+thay đổi các bit thì có gì bất khả? Song, có rất nhiều công việc chẳng xứng đáng
+phải tốn hao sức lực như vậy. Khi mà một việc nào đó chua ăn hơn giá trị sử
+dụng, bạn đơn giản là bế tắc.</p>
+<p>Tôi đã đề cập tới một ví dụ của việc này trong bài trước. Tôi nhận được một bản
+báo lỗi và phải móc nối nó với các danh biểu đặng chẩn đoán và sửa lỗi. Mà để
+làm được như vậy thì tôi cần các tập tin .dSYM. Nhưng tôi lại không biết mình có
+còn giữ các tập tin .dSYM tương ứng với chương trình gây lỗi kia không. Và nếu
+tôi không còn giữ, thì tôi đơn giản là bị bế tắc, bởi vì cái bản báo lỗi sẽ
+không giúp ích được gì.</p>
+<p>Một ví dụ khác là mất mật mã. Trong một số hệ thống bảo mật, nếu bạn quên mật mã
+thì đơn giản là bạn bế tắc. Bạn sẽ không tiếp tục được khi không có mật mã và
+bạn sẽ không thể làm gì cả. Bạn sẽ phải làm lại từ đầu, với một trương mục mới,
+và có khi dữ liệu ở trương mục cũ sẽ mất hết ráo. Đó là một trường hợp kinh
+hoàng của việc bế tắc.</p>
+<p>Bế tắc đơn thuần có thể rất tệ hại. Nhưng thường ta sẽ không gặp tình trạng tệ
+hại cỡ này.</p>
+<p>Thực chất, có thể nói rằng mối nguy của việc gặp bế tắc dạng này còn ảnh hưởng
+tới lập trình viên nhiều hơn là khi bế tắc thật. Tức là, khi chúng ta sợ phải
+làm việc gì, thường ta chưa thật sự bế tắc nhưng khá chắc rằng sớm muộn sẽ bị bế
+tắc. Chúng ta không muốn bế tắc, thế nên ta kiếm chuyện khác để làm – một công
+việc khác, hoặc một màn Crush the Castle chẳng hạn. Và cố nhiên, trớ trêu thay,
+khi cố né tránh công việc để tránh sự bế tắc, ta ngay lập tức rơi vào bế tắc. Ta
+dừng tiến độ công việc. Ta trì hoãn. Và trì hoãn tức là bế tắc chứ còn gì.</p>
+<p>Tôi nghĩ rằng lý do chính khiến các lập trình viên thích tự viết code của riêng
+họ thay vì xài thư viện ngoài là do nỗi sợ trên – sợ bí lối. Nghe có vẻ vô lý,
+nhưng tôi nghĩ là có. Khi tôi viết mã, tôi thông suốt không bế tắc. Tôi cảm thấy
+mạnh mẽ, ngầu đời, và thích thú lập trình. Tôi có thể làm trôi chảy và hoàn
+thành cả tá việc chỉ trong vài giờ. Khi tôi xài mã của thiên hạ, tôi phải nghiên
+cứu để hiểu những khái niệm của họ, bộ API của họ và những tham số hàm ngớ ngẩn
+mà họ đưa ra. Tôi biết rằng thế nào tôi cũng gặp phải một lỗi tôi không hiểu
+được, hoặc một hàm gây lỗi chẳng vì lý do gì rõ ràng. Tôi bế tắc hoặc dần tiến
+tới sự bế tắc. Và sau nhiều giờ tôi chẳng làm được gì nên thân.</p>
+<p>Vậy thì, giữa thông suốt không bế tắc và đơn giản là bế tắc, ai dại gì mà chọn
+bế tắc? Ai mà không phát minh lại bánh xe? Nói sao thì nói, đã là lập trình viên
+thì khoái lập trình, và bế tắc là kẻ thù số một. Một khi không nhất thiết phải
+xài thư viện của người khác, chúng ta sẽ chọn ngay giải pháp không-bế-tắc.</p>
+
+            </div>
+        </div>
+	    <div class="footer">
+            <p>Created with <a href="http://github.com/huytd/azeroth-js">azeroth.js</a></p>
+            <div class="social">
+                <a href="https://www.facebook.com/anhdangnhat"><i class="icon-facebook-squared"></i></a>
+                <a href="https://twitter.com/anhdangnhat"><i class="icon-twitter-squared"></i></a>
+                <a href="https://www.linkedin.com/in/anhdangnhat"><i class="icon-linkedin-squared"></i></a>
+                <a href="https://github.com/alexanderdna"><i class="icon-github-squared"></i></a>
+            </div>
+        </div>
+        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            skipTags: ["script","noscript","style","textarea"]
+          }
+        });
+        </script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'Insert-Your-GA-ID-Here', 'auto');
+          ga('send', 'pageview');
+        </script>
+    </body>
+</html>
