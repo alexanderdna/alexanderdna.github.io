@@ -8,7 +8,7 @@ Hệ thống gởi lời chào và chúc bạn chơi vui vẻ.
 
 ## Bài gốc
 
-_Đang viết..._
+- [Sử dụng Vector trong Unity](posts/p201205-vector.html)
 
 ## Bài dịch
 
