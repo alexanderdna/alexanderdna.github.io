@@ -8,6 +8,7 @@ Hệ thống gởi lời chào và chúc bạn chơi vui vẻ.
 
 ## Bài gốc
 
+- [Đóng gói và truy cập asset trong Unity](posts/p201206-asset.html)
 - [Sử dụng Vector trong Unity](posts/p201205-vector.html)
 
 ## Bài dịch

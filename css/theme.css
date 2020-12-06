@@ -108,7 +108,7 @@ html, body {
 }
 
 .container {
-    max-width: 700px;
+    max-width: 960px;
     height: auto;
     min-height: calc(100% - 260px);
     margin: 0 auto;
