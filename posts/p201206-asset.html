@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title> Đóng gói và truy cập asset trong Unity | Blog</title>
+        <title> Đóng gói và truy cập asset trong Unity | anhdang.dev.blog</title>
         <meta charset="utf-8">
         <meta http-equiv="content-type" content="text/html;"><meta name=viewport content="initial-scale=1.0 maximum-scale=1.0">
         
@@ -22,184 +22,274 @@
                 <h1 id="-ng-g-i-v-truy-c-p-asset-trong-unity">Đóng gói và truy cập asset trong Unity</h1>
 <blockquote>
 <p>Bài viết dựa trên kinh nghiệm cá nhân của tác giả khi làm việc với
-Asset Bundles trong một số dự án game. Addressables cũng là một
-công cụ hữu ích, nhưng sẽ không được đề cập trong bài viết này
-vì tác giả chưa rành cách xài :&gt;</p>
+Asset Bundle trong các dự án game. Một số phần code có tham khảo
+từ đồng nghiệp.</p>
 </blockquote>
-<h2 id="gi-i-thi-u">Giới thiệu</h2>
+<hr>
+<p>Mục lục</p>
+<ul>
+<li><a href="#intro">I. Giới thiệu</a></li>
+<li><a href="#setup">II. Tổ chức</a></li>
+<li><a href="#loading">III. Truy cập</a></li>
+<li><a href="#build">IV. Đóng gói</a></li>
+<li><a href="#conclusion">V. Kết luận</a></li>
+<li><a href="#source">VI. Mã nguồn</a></li>
+</ul>
+<hr>
+<h2 id="-a-name-intro-a-i-gi-i-thi-u"><a name="intro"></a> I. Giới thiệu</h2>
 <p>Khi làm một dự án Unity mà số lượng asset tương đối lớn, ta không thể
 chỉ dùng ScriptableObject hoặc thư mục Resources để quản lý các asset
-này. May thay, Asset Bundles là một giải pháp rất tốt. Ta có thể phân
+này. May thay, Asset Bundle là một giải pháp rất tốt. Ta có thể phân
 các asset vào những nhóm nhỏ dựa trên công dụng hoặc nội dung của
 chúng và cho vào từng bundle riêng. Các bundle này có thể được đóng
 gói chung với game hoặc để trên server và tải xuống sau ở dạng DLC.</p>
 <p>Bài viết này cung cấp một &quot;dàn ý&quot; về cách lưu trữ asset trong các
-Asset Bundles cũng như cách quản lý và truy cập những asset này trong
+Asset Bundle cũng như cách quản lý và truy cập những asset này trong
 lúc chạy game.</p>
-<h2 id="chu-n-b-">Chuẩn bị</h2>
-<p>Để đưa asset vào một bundle, cách thủ công là gán tên bundle cho nó
-ở cạnh dưới cửa sổ Inspector. Nhưng với số lượng asset khá lớn thì đó
-không phải cách hay. Thay vào đó, ta dùng <strong>AssetBundle Browser</strong>, một
-plugin do chính Unity cung cấp và có thể cài đặt thông qua Package
-Manager.</p>
-<p>Cách sử dụng chi tiết của AssetBundle Browser có thể xem tại link sau:</p>
-<p><a href="https://docs.unity3d.com/Manual/AssetBundles-Browser.html">https://docs.unity3d.com/Manual/AssetBundles-Browser.html</a></p>
-<p>Sau khi tạo các bundle tùy nhu cầu và kéo asset vào xong, chúng ta có
-thể tiến hành công đoạn đóng gói bằng nút <code>Build</code> trong cửa sổ plugin.
-Những bundle đã đóng gói sẽ nằm trong thư mục <code>StreamingAssets</code> nếu bạn
-có đánh dấu vào mục <code>Copy to StreamingAssets</code>.</p>
-<blockquote>
-<p>Trước khi build game, bạn nhớ chạy lệnh Build của AssetBundle Browser
-để cập nhật đúng và đủ những asset cần sử dụng trong game.</p>
+<hr>
+<h2 id="-a-name-setup-a-ii-t-ch-c"><a name="setup"></a> II. Tổ chức</h2>
+<p>Asset có thể là một prefab, một tấm hình, một đoạn âm thanh, v.v. và
+sẽ được đặt trong một bundle nhất định. Game sẽ gồm nhiều bundle, mỗi
+bundle có tên và nội dung riêng.</p>
+<h3 id="ii-1-t-n-cho-bundle">II.1. Tên cho bundle</h3>
+<p>Trong bài này, ta sẽ quy định tên bundle như sau:</p>
+<ul>
+<li>Gồm một hoặc nhiều đoạn để thể hiện thứ bậc.</li>
+<li>Mỗi đoạn đặt trong cặp dấu ( ) cho tách biệt với nhau.</li>
+</ul>
+<p>Ví dụ, cùng là asset cho UI, nhưng prefab để riêng, hình ảnh để riêng.
+Ta sẽ có 2 bundle như sau:</p>
+<ul>
+<li><code>(ui)(images)</code></li>
+<li><code>(ui)(prefabs)</code></li>
+</ul>
+<h3 id="ii-2-t-n-cho-asset">II.2. Tên cho asset</h3>
+<p>Như bạn đã (sẽ?) biết, để truy cập asset từ bundle, ta cần truyền cả tên
+của bundle lẫn tên của asset. Việc này không quá phiền phức nếu ta sắp
+đặt mọi thứ một cách cực kỳ quy củ. Nhưng đôi khi người viết code và
+người làm asset không có chung quan điểm về phân loại asset, nên việc
+tổ chức bundle lung tung là điều dễ xảy ra.</p>
+<p>Để tạo sự thuận tiện nhất định, ta sẽ viết một cơ chế truy cập asset
+chỉ cần dùng tên mà không quan tâm asset đó nằm ở bundle nào. Việc này
+được thực hiện bằng cách tạo một bảng ánh xạ từ tên asset sang tên bundle
+chứa nó. Bảng này hình thành lúc chạy game và nạp các bundle lên.</p>
+<p>Nhưng nếu tất cả mọi asset trong bundle đều được đưa vào bảng ánh xạ thì
+sẽ là dư thừa. Ví dụ, bạn cần truy cập một material, còn tấm texture
+mà nó sử dụng là gì thì không bao giờ phải trực tiếp truy cập tới. Vậy
+tấm texture đó không cần nằm trong bảng ánh xạ.</p>
+<p>Làm sao để phân loại hai kiểu asset như vậy? Giải pháp chúng ta sẽ dùng
+ở đây là: các asset nào muốn để vào bảng ánh xạ thì tên của nó sẽ bắt
+đầu bằng một ký tự đánh dấu, ví dụ <code>@</code>. Khi nạp bundle và tạo bảng
+ánh xạ, ta chỉ lấy các asset được đánh dấu này để đưa vào bảng.</p>
+<h3 id="ii-3-a-asset-v-o-bundle">II.3. Đưa asset vào bundle</h3>
+<p>Để đưa asset vào bundle, ta có thể làm một trong các cách sau đây:</p>
+<ol>
+<li>Tự gắn tên bundle trong Inspector của asset.<blockquote>
+<p>Chọn asset, nhìn cửa sổ Inspector, khu vực dưới đáy, bạn sẽ
+thấy chỗ chọn bundle và tạo bundle mới nếu chưa có.</p>
 </blockquote>
-<h2 id="t-i-c-c-bundle-l-n-khi-ch-y-game">Tải các bundle lên khi chạy game</h2>
-<p>Một khi đã chuẩn bị xong các asset bundle thì việc tải chúng lên bộ nhớ
-và truy cập các asset bên trong sẽ không quá phức tạp.</p>
-<p>Ta tạo một class quản lý asset như sau:</p>
-<pre><code class="lang-csharp">using System.Collections.Generic;
-using UnityEngine;
+</li>
+<li>Dùng plugin <em>AssetBundle Browser</em> do Unity cung cấp.<blockquote>
+<p>Plugin này có thể cài từ Package Manager của Unity.</p>
+</blockquote>
+</li>
+<li>Viết code tự động hóa để gắn mọi asset có đánh dấu <code>@</code>
+vào bundle cùng tên với thư mục chứa nó.<blockquote>
+<p>Yêu cầu sắp xếp bundle ở dạng thư mục và không được lồng vào nhau.</p>
+</blockquote>
+</li>
+</ol>
+<p>Với cách 1 và 3, ta sẽ cần thêm một phần code nữa để đóng gói các
+asset bundle trước khi build game. Riêng cách 2 thì chức năng
+đóng gói nằm sẵn trong cửa sổ AssetBundle Browser.</p>
+<p>Trong bài này, ta sẽ dùng <strong>cách số 3</strong>, với các quy tắc sau:</p>
+<ul>
+<li>Mỗi bundle được đại diện bằng 1 thư mục.</li>
+<li>Mỗi thư mục phải chứa ít nhất 1 asset có tên dạng <code>@something</code>.</li>
+<li>Các asset dạng <code>@</code> không được trùng tên, cho dù khác bundle.</li>
+</ul>
+<h3 id="ii-4-th-c-hi-n">II.4. Thực hiện</h3>
+<p>Trước tiên, trong khu vực Assets của dự án, bạn tạo một thư mục
+mới và đặt tên là <code>ABs</code>. Có thể chọn tên khác nếu thích. Đường
+dẫn của nó sẽ là:</p>
+<ul>
+<li><code>Assets/ABs/</code></li>
+</ul>
+<p>Cho mục đích ví dụ, bạn tạo tiếp 3 thư mục con trong <code>ABs</code> và
+đặt tên lần lượt là:</p>
+<ul>
+<li><code>(common)</code>: chứa các asset chung chung của game.</li>
+<li><code>(ui)(images)</code>: chứa các asset dạng hình ảnh dùng cho UI.</li>
+<li><code>(ui)(prefabs)</code>: chứa các asset dạng prefab dùng cho UI.</li>
+</ul>
+<p>Đây sẽ là 3 asset bundle của game.</p>
+<p>Để các asset được gắn bundle một cách tự động khi ta bỏ chúng
+vào thư mục tương ứng, ta cần viết một ít code. Trong thư mục
+<code>Scripts</code>, bạn tạo một thư mục có tên chính xác là <code>Editor</code>
+và thêm tập tin script với nội dung như
+<a href="#source-assetbundleautotagger">mã nguồn này</a>.</p>
+<p>Chờ code compile, và thử chép một tập tin hình vào <code>(ui)(images)</code>,
+bạn nhìn Inspector sẽ thấy asset hình đã được tự động gắn vào
+bundle cùng tên. Nếu di chuyển asset từ thư mục bundle này sang
+thư mục bundle khác, nó cũng sẽ được thay đổi bundle tương ứng.</p>
+<hr>
+<h2 id="-a-name-loading-a-iii-truy-c-p"><a name="loading"></a> III. Truy cập</h2>
+<p>Một khi đã chuẩn bị xong các asset bundle thì việc tải chúng lên
+bộ nhớ và truy cập các asset bên trong sẽ không quá phức tạp.</p>
+<p>Cũng trong thư mục <code>Scripts</code>, bạn tạo một thư mục tên là <code>GameAsset</code>
+và thêm script <code>GameAssetManager</code>. Nội dung của script sẽ
+giống như <a href="#source-gameassetmanager">mã nguồn này</a>.</p>
+<p>Trong scene khởi động của game, bạn tạo một <em>GameObject</em> mới
+và gắn component <code>GameAssetManager</code>. Do được thiết kế
+dạng <strong>singleton</strong>, object này sẽ tồn tại xuyên suốt các
+scene cho tới khi tắt game. Nhớ đặt tên cho dễ nhận biết.</p>
+<p>Sau khi gắn component, trong phần inspector của <code>GameAssetManager</code>,
+bạn tìm mục <code>Bundle Names</code> và thêm tên của 3 bundle đã tạo.</p>
+<p>Giờ, ví dụ ta cần load một sprite tên là <code>@btn_yellow</code> để gắn vào một
+đối tượng Image của UI, ta có code đại khái như sau:</p>
+<pre><code class="lang-csharp">    var sprite = GameAssetManager.Instance.LoadAsset&lt;Sprite&gt;(&quot;@btn_yellow&quot;);
+    myButtonImage.sprite = sprite;
+</code></pre>
+<hr>
+<h2 id="-a-name-build-a-iv-ng-g-i"><a name="build"></a> IV. Đóng gói</h2>
+<p>Để sử dụng asset bundle trong bản build của game, ta cần đóng gói
+chúng thành các tập tin và cho vào thư mục <code>Assets/StreamingAssets</code>.
+Việc này không thực hiện bằng tay mà thông qua một API do Unity
+cung cấp. Ta sẽ viết code sử dụng API này, kèm theo một vài
+thiết lập khác cho phù hợp với nhu cầu của mình.</p>
+<p>Trong thư mục <code>Scripts/Editor</code>, bạn tạo script mới với tên là
+<code>AssetBundleBuilder</code> cùng nội dung giống như
+<a href="#source-assetbundlebuilder">mã nguồn này</a>.</p>
+<p>Sau khi code compile xong, bạn sẽ thấy trên thanh trình đơn
+của Unity Editor đã xuất hiện mục <code>anhdev/PreBuild</code> với 2 lệnh
+đóng gói asset bundle cho Android và iOS.</p>
+<p>Mỗi khi chuẩn bị build game, bạn sẽ cần gọi lệnh đóng gói
+từ trình đơn này để cập nhật asset bundle vào StreamingAssets.
+Nếu không, bản build có thể thiếu asset hoặc chứa asset
+cũ từ lần build trước.</p>
+<blockquote>
+<p>Riêng trên editor thì không cần phải đóng gói trước, trừ phi
+bạn đặt _useAssetDatabase = false trong GameAssetManager.</p>
+</blockquote>
+<hr>
+<h2 id="-a-name-conclusion-a-v-k-t-lu-n"><a name="conclusion"></a> V. Kết luận</h2>
+<p>Tới đây thì mọi thứ đã thiết lập xong và bạn đã có thể bắt tay
+vào sử dụng &quot;mini framework&quot; mà chúng ta vừa thiết lập. Dĩ
+nhiên còn khá nhiều thứ để cải tiến. Danh sách bundle vẫn đang
+để trong <code>GameAssetManager</code>. Nếu đặt trong một tập tin riêng
+thì sẽ dễ kiểm soát hơn. Hàm <code>LoadAsset</code> cũng đang chạy ở
+dạng synchronous nên game sẽ bị khựng nếu asset tương đối lớn.
+Bạn có thể nghiên cứu sử dụng <code>LoadAssetAsync</code> để giúp trải
+nghiệm của người dùng được tốt hơn.</p>
+<p>Hy vọng thông qua bài viết này, tác giả đã mang lại một
+cái nhìn tương đối đầy đủ về giải pháp quản lý asset trong game
+bằng asset bundle, để từ đó bạn có thể phát triển lên thành
+một bộ code hoàn chỉnh và cứng cáp nhằm phục vụ cho dự án
+game của bản thân hoặc studio.</p>
+<p>Cảm ơn bạn đã ghé chơi và đọc bài viết này.
+Mọi góp ý và thắc mắc, xin liên lạc với tác giả thông qua
+Twitter hoặc Facebook (link cuối trang). Xin chào và hẹn
+ngày tái ngộ.</p>
+<hr>
+<h2 id="-a-name-source-a-vi-m-ngu-n"><a name="source"></a> VI. Mã nguồn</h2>
+<h3 id="-a-name-source-assetbundleautotagger-a-assetbundleautotagger"><a name="source-assetbundleautotagger"></a> AssetBundleAutoTagger</h3>
+<pre><code class="lang-csharp">using System.IO;
+using UnityEditor;
 
-public sealed class GameAssetManager : MonoBehaviour
+// Đây là một script tự động hóa, sử dụng API của Unity.
+public class AssetBundleAutoTagger : AssetPostprocessor
 {
-    public static GameAssetManager Instance { get; private set; }
+    // Nếu không dùng tên &quot;ABs&quot;, nhớ sửa đường dẫn này.
+    private const string PathPrefix = &quot;Assets/ABs/&quot;;
 
-    public void Awake()
+    // Hàm này sẽ được gọi khi có thay đổi về asset.
+    // Ta chỉ cần kiểm tra các asset mới import và
+    // các asset được di chuyển từ thư mục này qua
+    // thư mục khác.
+    private static void OnPostprocessAllAssets(
+        string[] importedAssets, string[] deletedAssets,
+        string[] movedAssets, string[] movedFromAssetPaths)
     {
-        if (Instance == null)
+        for (int i = 0, c = importedAssets.Length; i &lt; c; ++i)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            var path = importedAssets[i];
 
-            // hàm này từ từ sẽ có
-            preloadBundles();
+            if (AssetDatabase.IsValidFolder(path)) continue;
+
+            path = path.Replace(&#39;\\&#39;, &#39;/&#39;);
+            if (path.StartsWith(PathPrefix))
+            {
+                process(path);
+            }
         }
-        else if (Instance != this)
+
+        for (int i = 0, c = movedAssets.Length; i &lt; c; ++i)
         {
-            Destroy(gameObject);
+            var path = movedAssets[i];
+
+            if (AssetDatabase.IsValidFolder(path)) continue;
+
+            path = path.Replace(&#39;\\&#39;, &#39;/&#39;);
+            if (path.StartsWith(PathPrefix))
+            {
+                process(path);
+            }
+        }
+    }
+
+    private static void process(string path)
+    {
+        var subPath = path.Substring(PathPrefix.Length);
+        var folder = subPath.Substring(0, subPath.IndexOf(&#39;/&#39;));
+
+        var importer = AssetImporter.GetAtPath(path);
+        var name = Path.GetFileNameWithoutExtension(path);
+
+        // Chỉ được dùng 1 dấu @ trong tên.
+        if (subPath.IndexOf(&#39;@&#39;) != subPath.LastIndexOf(&#39;@&#39;)) return;
+
+        if (name.StartsWith(&quot;@&quot;))
+        {
+            if (importer.assetBundleName != folder)
+            {
+                importer.SetAssetBundleNameAndVariant(
+                    folder, importer.assetBundleVariant);
+            }
         }
     }
 }
 </code></pre>
-<p>Theo đoạn code trên, bạn có thể thấy chúng ta sẽ dùng một thực thể
-dạng singleton để quản lý việc tải bundle và truy xuất asset. Bạn
-hoàn toàn có thể dùng một mô hình khác nếu không thích singleton.</p>
-<p>Qua Unity, chờ compile xong code mới, ta tạo một GameObject trong
-scene khởi động của game (scene đầu tiên mở ra khi chạy game) và
-thêm component <code>GameAssetManager</code>. Nếu không đụng chạm gì nữa thì
-GameObject này sẽ tồn tại cho tới khi tắt game.</p>
-<blockquote>
-<p>Nhớ đặt tên cho GameObject đó để dễ phân biệt.</p>
-</blockquote>
-<p>Chúng ta tiếp tục khai báo một danh sách các bundle có trong game:</p>
-<pre><code class="lang-csharp">    private static readonly string[] bundleNames =
-    {
-        &quot;(common)&quot;,
-        &quot;(model)(islands)&quot;,
-        &quot;(model)(people)&quot;,
-        &quot;(shader)(plant)&quot;,
-        &quot;(shader)(people)&quot;,
-        &quot;(ui)(images)&quot;,
-    };
-</code></pre>
-<p>Theo sau là một bảng chứa các bundle sẽ được nạp:</p>
-<pre><code class="lang-csharp">    private Dictionary&lt;string, AssetBundle&gt; _bundles;
-</code></pre>
-<p>Bạn có thể thấy trong lúc khởi tạo, chúng ta gọi một hàm tên là
-<code>preloadBundles</code>, và sau đây nội dung của nó:</p>
-<pre><code class="lang-csharp">    private void preloadBundles()
-    {
-        _bundles = new Dictionary&lt;string, AssetBundle&gt;();
-
-        for (int i = 0, c = bundleNames.Length; i &lt; c; ++i)
-        {
-            var bundleName = bundleNames[i];
-
-            string bundlePath;
-
-            // Đường dẫn tới các asset bundle sẽ khác nhau
-            // tùy theo nền tảng, nên ta chia nhánh code.
-
-#if UNITY_IOS || UNITY_EDITOR
-            bundlePath = string.Concat(Application.streamingAssetsPath,
-                &quot;/&quot;, bundleName);
-
-#elif UNITY_ANDROID
-            bundlePath = string.Concat(Application.dataPath,
-                &quot;!assets/&quot;, bundleName);
-
-#else
-            bundlePath = &quot;&quot;;
-#endif
-
-            var bundle = AssetBundle.LoadFromFile(bundlePath);
-            _bundles.Add(bundleName, bundle);
-        }
-    }
-</code></pre>
-<p>Cuối cùng, để truy xuất một asset nhất định, ta có hàm sau đây:</p>
-<pre><code class="lang-csharp">    public T Load&lt;T&gt;(string bundleName, string name)
-        where T : UnityEngine.Object
-    {
-        T obj;
-
-        var bundle = _bundles[bundleName];
-        obj = bundle.LoadAsset&lt;T&gt;(name);
-
-        return obj;
-    }
-</code></pre>
-<p>Ví dụ, ta cần load một tấm hình để đưa vào UI Image. Giả sử tấm hình
-tên là <code>button_yellon</code> và bundle có tên là <code>(ui)(images)</code> thì code sẽ
-trông từa tựa như sau:</p>
-<pre><code class="lang-csharp">    var sprite = GameAssetManager.Instance.Load&lt;Sprite&gt;(
-        &quot;(ui)(images)&quot;, &quot;button_yellow&quot;);
-
-    myButtonImage.sprite = sprite;
-)
-</code></pre>
-<h2 id="c-i-ti-n">Cải tiến</h2>
-<p>Nội dung của <code>GameAssetManager</code> đang trong giai đoạn thô sơ. Nó có một
-số hạn chế như sau:</p>
-<ol>
-<li>Mỗi lần có thay đổi về asset là phải đóng gói lại mới có thể chạy
-test, dù chỉ trên editor.</li>
-<li>Danh sách bundle đang được để trong code, khó quản lý nếu người làm
-asset không có thẩm quyền về code.</li>
-</ol>
-<p>Nhược điểm số 1 có thể được giải quyết bằng một phiên bản sử dụng
-<code>AssetDatabase</code>, hỗ trợ truy cập trực tiếp các asset nếu chạy test trên
-Unity Editor mà không cần đóng gói trước. Phiên bản này được đặt ở cuối bài.</p>
-<p>Nhược điểm số 2 có thể được giải quyết bằng cách khai báo một biến dạng
-<code>SerializedField</code> và để người làm asset tự quyết định số lượng cũng như tên
-của các bundle cần được tải trong game. Biến này có thể kiểu mảng string,
-hoặc dẫn tới một ScriptableObject để tăng tính khu biệt. Các bạn sẽ là
-người viết phiên bản này nhé, cho tay chân vận động một chút.</p>
-<p>Ngoài ra, hàm <code>LoadAsset</code> sẽ chạy theo kiểu synchronous. Nghĩa là nếu asset
-tương đối lớn thì game sẽ bị khựng một vài giây. Bạn có thể nghiên cứu
-và chuyển qua xài <code>LoadAssetAsync</code> để tối ưu hóa trải nghiệm người dùng.</p>
-<h2 id="source-code-tham-kh-o">Source code tham khảo</h2>
-<pre><code class="lang-csharp">using System.Collections.Generic;
+<h3 id="-a-name-source-gameassetmanager-a-gameassetmanager"><a name="source-gameassetmanager"></a> GameAssetManager</h3>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+// Thực thể quản lý asset bundle trong game.
+// Chạy ở dạng singleton GameObject.
 public sealed class GameAssetManager : MonoBehaviour
 {
 #if UNITY_EDITOR
-    private const bool useAssetDatabase = true;
+    // Dùng AssetDatabase để truy cập asset mà không cần đóng gói trước.
+    // Chỉ hoạt động trên Unity Editor.
+    // Đặt về false nếu muốn test kết quả đóng gói ngay trên editor.
+    private bool _useAssetDatabase = true;
 #endif
 
-    private static readonly string[] bundleNames =
-    {
-        &quot;(common)&quot;,
-        &quot;(model)(islands)&quot;,
-        &quot;(model)(people)&quot;,
-        &quot;(shader)(plant)&quot;,
-        &quot;(shader)(people)&quot;,
-        &quot;(ui)(images)&quot;,
-    };
+    // Danh sách các bundle trong game. Điền trong Inspector.
+    [SerializeField]
+    private string[] _bundleNames = { };
+
+    // Danh sách các bundle sẽ được load vào game.
+    private List&lt;AssetBundle&gt; _bundles = new List&lt;AssetBundle&gt;();
+
+    // Bảng ánh xạ từ tên asset sang chỉ số của bundle chứa nó.
+    private Dictionary&lt;string, int&gt; _assetNameToBundleIndexDict;
 
     public static GameAssetManager Instance { get; private set; }
-
-    private Dictionary&lt;string, AssetBundle&gt; _bundles;
 
     public void Awake()
     {
@@ -216,72 +306,195 @@ public sealed class GameAssetManager : MonoBehaviour
         }
     }
 
+    // Load các bundle từ persistent storage.
     private void preloadBundles()
     {
-#if UNITY_EDITOR
-        if (useAssetDatabase)
-        {
-            return;
-        }
-#endif
-
-#pragma warning disable CS0162 // Unreachable code detected
-        _bundles = new Dictionary&lt;string, AssetBundle&gt;();
-#pragma warning restore CS0162 // Unreachable code detected
-
-        for (int i = 0, c = bundleNames.Length; i &lt; c; ++i)
-        {
-            var bundleName = bundleNames[i];
-
-#pragma warning disable CS0162 // Unreachable code detected
-            string bundlePath;
-#pragma warning restore CS0162 // Unreachable code detected
-
-#if UNITY_IOS || UNITY_EDITOR
-            bundlePath = string.Concat(Application.streamingAssetsPath, &quot;/&quot;, bundleName);
-#elif UNITY_ANDROID
-            bundlePath = string.Concat(Application.dataPath, &quot;!assets/&quot;, bundleName);
-#else
-            bundlePath = &quot;&quot;;
-#endif
-
-            var bundle = AssetBundle.LoadFromFile(bundlePath);
-            _bundles.Add(bundleName, bundle);
-        }
-    }
-
-    public T Load&lt;T&gt;(string bundleName, string name) where T : UnityEngine.Object
-    {
-        T obj;
+        _assetNameToBundleIndexDict = new Dictionary&lt;string, int&gt;();
 
 #if UNITY_EDITOR
-        if (useAssetDatabase)
+        // Trường hợp chạy editor và bỏ qua việc load bundle đã đóng gói.
+        if (_useAssetDatabase)
         {
-            var paths = UnityEditor.AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(bundleName, name);
-            if (paths.Length &gt; 0)
+            for (int i = 0, c = _bundleNames.Length; i &lt; c; ++i)
             {
-                var path = UnityEditor.AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(bundleName, name)[0];
-                obj = UnityEditor.AssetDatabase.LoadAssetAtPath&lt;T&gt;(path);
-            }
-            else
-            {
-                obj = null;
+                var bundleName = _bundleNames[i];
+
+                var assetPathsFromBundle =
+                    AssetDatabase.GetAssetPathsFromAssetBundle(bundleName);
+
+                // Lấy danh sách các asset trong bundle và đưa vào bảng ánh xạ.
+                checkMapAssetNames(assetPathsFromBundle, bundleIndex: i);
             }
         }
+        // Trường hợp không phải editor hoặc không dùng AssetDatabase.
         else
         {
 #endif
+            _bundles = new List&lt;AssetBundle&gt;();
 
-#pragma warning disable CS0162 // Unreachable code detected
-            var bundle = _bundles[bundleName];
-            obj = bundle.LoadAsset&lt;T&gt;(name);
-#pragma warning restore CS0162 // Unreachable code detected
+            for (int i = 0, c = _bundleNames.Length; i &lt; c; ++i)
+            {
+                var bundleName = _bundleNames[i];
 
+                string bundlePath;
+
+                // Đường dẫn tới các asset bundle sẽ khác nhau
+                // tùy theo nền tảng, nên ta chia nhánh code.
+
+#if UNITY_IOS || UNITY_EDITOR
+                bundlePath = string.Concat(Application.streamingAssetsPath,
+                    &quot;/abs/&quot;, bundleName);
+
+#elif UNITY_ANDROID
+                bundlePath = string.Concat(Application.dataPath,
+                    &quot;!assets/abs/&quot;, bundleName);
+
+#else
+                bundlePath = &quot;&quot;;
+#endif
+
+                var bundle = AssetBundle.LoadFromFile(bundlePath);
+
+                // Lấy danh sách các asset trong bundle vừa load và đưa vào bảng ánh xạ.
+                checkMapAssetNames(bundle.GetAllAssetNames(), bundleIndex: i);
+
+                _bundles.Add(bundle);
+            }
 #if UNITY_EDITOR
         }
 #endif
+    }
 
-        return obj;
+    private void checkMapAssetNames(string[] assetNames, int bundleIndex)
+    {
+        for (int i = 0, n = assetNames.Length; i &lt; n; ++i)
+        {
+            // Asset phải có tên bắt đầu bằng @ thì mới đưa vào bảng.
+            if (calcNameFromPath(assetNames[i], out string name))
+            {
+                // Tên asset không được trùng lặp.
+                if (!_assetNameToBundleIndexDict.ContainsKey(name))
+                {
+                    _assetNameToBundleIndexDict.Add(name, bundleIndex);
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        &quot;Duplicated unique asset name: &quot; + name);
+                }
+            }
+        }
+    }
+
+    private bool calcNameFromPath(string path, out string name)
+    {
+        name = path;
+        int lastBackSlashIndex = name.LastIndexOf(&#39;/&#39;);
+        name = lastBackSlashIndex &gt; 0 ? name.Substring(lastBackSlashIndex + 1) : name;
+        if (name.StartsWith(&quot;@&quot;))
+        {
+            int lastDotIndex = name.LastIndexOf(&#39;.&#39;);
+            name = lastDotIndex &gt; 0 ? name.Substring(0, lastDotIndex) : name;
+            return true;
+        }
+
+        return false;
+    }
+
+    // Hàm load asset từ bundle, nhận tên của asset và trả về dữ liệu tương ứng.
+    public T LoadAsset&lt;T&gt;(string name) where T : UnityEngine.Object
+    {
+        if (!name.StartsWith(&quot;@&quot;))
+        {
+            throw new NotSupportedException(
+                &quot;Only support unique name, start with @&quot;);
+        }
+
+        if (_assetNameToBundleIndexDict.TryGetValue(name, out int bundleIndex))
+        {
+            return loadAsset&lt;T&gt;(bundleIndex, name);
+        }
+        else
+        {
+            throw new KeyNotFoundException(
+                &quot;Asset name &quot; + name + &quot; is not found&quot;);
+        }
+    }
+
+    private T loadAsset&lt;T&gt;(int bundleIndex, string name)
+        where T : UnityEngine.Object
+    {
+#if UNITY_EDITOR
+        if (_useAssetDatabase)
+        {
+            return AssetDatabase.LoadAssetAtPath&lt;T&gt;(
+                AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(
+                    _bundleNames[bundleIndex], name)[0]);
+        }
+#endif
+        return _bundles[bundleIndex].LoadAsset&lt;T&gt;(name);
+    }
+}
+</code></pre>
+<h3 id="-a-name-source-assetbundlebuilder-a-assetbundlebuilder"><a name="source-assetbundlebuilder"></a> AssetBundleBuilder</h3>
+<pre><code class="lang-csharp">using System.IO;
+using UnityEditor;
+using UnityEngine;
+
+public class AssetBundleBuilder
+{
+    [MenuItem(&quot;anhdev/PreBuild/[ANDROID] Build Asset Bundles&quot;)]
+    public static void DoPreBuildStepsForAndroid()
+    {
+        doPreBuildSteps(true);
+    }
+
+    [MenuItem(&quot;anhdev/PreBuild/[iOS] Build Asset Bundles&quot;)]
+    public static void DoPreBuildStepsForiOS()
+    {
+        doPreBuildSteps(false);
+    }
+
+    private static void doPreBuildSteps(bool isAndroid)
+    {
+        // Tạo thư mục tạm chứa các tập tin đóng gói.
+        string tmpPath = Application.dataPath
+            + &quot;/../_abs_build_tmp/&quot; + (isAndroid ? &quot;Android/&quot; : &quot;iOS/&quot;);
+        if (Directory.Exists(tmpPath))
+        {
+            Directory.Delete(tmpPath, recursive: true);
+        }
+        Directory.CreateDirectory(tmpPath);
+
+        // Gọi API đóng gói tùy theo nền tảng.
+        buildAssetBundles(tmpPath, isAndroid ? BuildTarget.Android : BuildTarget.iOS);
+
+        // Chép các tập tin bundle vào StreamingAssets.
+        copyFullToStreamingAssets(tmpPath);
+    }
+
+    private static void buildAssetBundles(string outputPath, BuildTarget target)
+    {
+        if (Directory.Exists(outputPath)) Directory.Delete(outputPath, recursive: true);
+        Directory.CreateDirectory(outputPath);
+
+        BuildPipeline.BuildAssetBundles(outputPath,
+            BuildAssetBundleOptions.ChunkBasedCompression,
+            target);
+    }
+
+    private static void copyFullToStreamingAssets(string sourceFolder)
+    {
+        var absFolder = Path.Combine(Application.streamingAssetsPath, &quot;abs/&quot;);
+        if (Directory.Exists(absFolder)) Directory.Delete(absFolder, recursive: true);
+        new DirectoryInfo(absFolder).Create();
+
+        foreach (string child in Directory.GetFiles(sourceFolder))
+        {
+            string fileName = Path.GetFileName(child);
+            if (child.EndsWith(&quot;.manifest&quot;) || fileName == &quot;abs&quot;) continue;
+            File.Copy(child, Path.Combine(absFolder, fileName));
+        }
     }
 }
 </code></pre>
