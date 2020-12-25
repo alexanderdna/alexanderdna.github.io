@@ -1,0 +1,233 @@
+<html>
+    <head>
+        <title> Esolang | anhdang.dev.blog</title>
+        <meta charset="utf-8">
+        <meta http-equiv="content-type" content="text/html;"><meta name=viewport content="initial-scale=1.0 maximum-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext,vietnamese" rel="stylesheet">
+        <link href="../css/theme.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/highlight/tomorrow-night.css">
+        <link rel="stylesheet" href="../css/fontello.css">
+        <script src="../js/highlight.pack.js"></script>
+        <script>
+        hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <a href="/"><i class="icon icon-emo-coffee"></i> anhdang.dev.blog</a>
+        </div>
+        <div class="container">
+            <div class="main">
+                <h1 id="esolang">Esolang</h1>
+<p>Trong một số dự án gần đây, tôi sử dụng Golang làm ngôn ngữ để viết
+chương trình trên server. Thiệt tình, dù không thể phủ nhận sức mạnh
+nó đem đến, tôi lại không ham cú pháp của nó một chút nào. Nó quái đản,
+gai góc, kỳ cục, mỗi lần viết thấy rất bực. Nó làm tôi nhớ tới mấy lần
+ghé mắt qua Xcode của anh đồng nghiệp, nhìn cái cách viết hàm của
+Objective-C xong tự nhiên thấy tức cái mình hết sức.</p>
+<p>Nhưng dù là Golang hay Objective-C thì cũng chỉ là hạng tép riu khi so
+về độ khùng điên với một phân nhóm ngôn ngữ có tên là <strong>esolang</strong>.</p>
+<p>Viết đầy đủ là <strong>esoteric programming language</strong>, tạm dịch ngôn ngữ
+lập trình dị biệt, đây là một khái niệm nói về những ngôn ngữ lập trình
+ra đời không nhằm mục đích viết ứng dụng thực tế. Người ta phát minh
+ra một esolang có thể vì muốn thử nghiệm một ý tưởng mới trong kỹ thuật,
+muốn làm cái gì đó lạ lùng khác người, hoặc đơn giản là cho vui.
+Trong phần sau đây, tôi mời các bạn tham khảo một số đại diện tiêu biểu nhất.</p>
+<h2 id="intercal">INTERCAL</h2>
+<blockquote>
+<p>Tác giả: Don Woods &amp; James M. Lyon</p>
+</blockquote>
+<p>Có thể được xem như tằng tổ của người chơi hệ dị hợm, ra đời vào năm 1972,
+tên đầy đủ của ngôn ngữ này là <strong>Compiler Language With No Pronounceable
+Acronym</strong> (cắt nghĩa đùi: ngôn ngữ biên dịch không có cách viết tắt nào
+có thể phát âm được) và rút gọn thành <strong>INTERCAL</strong>. Tôi biết bạn nghĩ gì.
+Kệ nó đi.</p>
+<p>Cú pháp của INTERCAL rất phức tạp và mang tính làm tình làm tội người sử dụng,
+nên mạn phép chỉ kể vài đặc điểm nổi bật.</p>
+<p>Chương trình sẽ gồm các câu lệnh bắt đầu với từ khoá <code>DO</code>, <code>PLEASE</code>, hoặc
+<code>PLEASE DO</code>. Nếu muốn ghi comment thì dùng <code>DON&#39;T</code> hoặc <code>PLEASE DO NOT</code>
+nhưng nếu chạy lại chỗ đó thì nó không còn là comment nữa và sẽ thi hành
+như bình thường. Nên để chắc chắn thì có thể ghi <code>PLEASE NOTE</code> thay vì
+<code>PLEASE NOT</code>, gây ra lỗi cú pháp và trình dịch sẽ ngó lơ.</p>
+<p>Trình biên dịch của INTERCAL có lẽ nên được gọi là &quot;trình hách dịch&quot;. Nếu
+mã lệnh có quá ít dòng xài từ khoá <code>PLEASE</code> thì sẽ bị coi là bất lịch sự
+và bị trình biên dịch từ chối. Nhưng nếu xài quá nhiều thì sẽ bị coi là
+thảo mai và cũng bị từ chối luôn. Ok chưa bạn ơi?</p>
+<h2 id="false">FALSE</h2>
+<blockquote>
+<p>Tác giả: Wouter van Oortmerssen</p>
+</blockquote>
+<p>Ra đời vào năm 1993, với cái tên ám chỉ giá trị Boolean ưa thích của tác giả,
+ngôn ngữ này tính ra cũng không quá hợm hĩnh so với người tiền nhiệm.
+Nó chỉ khó đọc, chứ không khó ở.</p>
+<p>Để lấy ví dụ, trước hết mời bạn xem đoạn mã giả trình bày hàm tính giai thừa:</p>
+<pre><code>func f(n) {
+  if (n == 1)
+    return 1;
+  else
+    return n * f(n - 1);
+}
+</code></pre><p>Không có gì cầu kỳ khó hiểu ha. Giờ nếu viết bằng ngôn ngữ FALSE,
+đoạn chương trình trên sẽ trở thành như thế này:</p>
+<pre><code>[$1=$[\%1\]?~[$1-f;!*]?]f:
+</code></pre><p>Khỏi phân tích nha. Muốn hiểu sao hiểu. Không hiểu cũng được.</p>
+<p>À và có một sự thật thú vị là trình dịch của FALSE có kích thước chỉ
+1024 bytes mà thôi.</p>
+<h2 id="befunge">Befunge</h2>
+<blockquote>
+<p>Tác giả: Chris Pressey</p>
+<p>Năm ra đời: 1993</p>
+</blockquote>
+<p>Chương trình viết bằng <strong>Befunge</strong> có một bộ nhớ dạng stack (ngăn xếp,
+dữ liệu đưa vào sau cùng sẽ được lấy ra đầu tiên). Mã lệnh không phải
+là từng dòng như các ngôn ngữ bình thường mà tổ chức thành một bảng
+hai chiều. Ở đó sẽ có một đầu đọc lệnh chạy tới ô nào thì thực hiện
+lệnh tại ô đó. Bốn ký tự <code>&lt;&gt;^v</code> được dùng làm mũi tên định hướng cho
+đầu đọc.</p>
+<p>Ví dụ chương trình Hello World kinh điển viết theo cách tương đối đơn giản:</p>
+<pre><code>&gt;              v
+v  ,,,,,&quot;Hello&quot;&lt;
+&gt;48*,          v
+v,,,,,,&quot;World!&quot;&lt;
+&gt;25*,@
+</code></pre><p>Cách hiểu như sau:</p>
+<ul>
+<li>Đầu tiên là di chuyển qua phải.</li>
+<li>Sau đó đi xuống.</li>
+<li>Rồi qua trái.</li>
+<li>Lần được lưu các ký tự <code>o l l e H</code> vô stack.</li>
+<li>In ra các ký tự trong stack bằng lệnh dấu phẩy.</li>
+<li>Đi xuống.</li>
+<li>Qua phải.</li>
+<li>Nhập <code>4</code> và <code>8</code> vào stack.</li>
+<li>Lấy ra nhân để được 32 (tức là mã của ký tự khoảng trắng) rồi in ra.</li>
+<li>Đi xuống.</li>
+<li>Qua trái.</li>
+<li>Tiếp tục lưu và in chuỗi ký tự <code>World!</code>.</li>
+<li>Đi xuống.</li>
+<li>Qua phải.</li>
+<li>Lấy 2 * 5 = 10, là mã của ký tự xuống dòng. Xong in ra.</li>
+<li>Kết thúc chương trình bằng lệnh <code>@</code>.</li>
+</ul>
+<p>Một phiên bản ngắn hơn chút đỉnh:</p>
+<pre><code> &gt;25*&quot;!dlrow ,olleH&quot;:v
+                  v:,_@
+                  &gt;  ^
+</code></pre><p>Trên đây, lệnh hai chấm <code>:</code> nghĩa là duplicate phần tử mới nhất trên stack.
+Còn lệnh gạch dưới <code>_</code> là rẽ nhánh, bằng cách pop phần tử mới nhất trên
+stack ra và kiểm tra, nếu bằng 0 thì đi qua phải, khác 0 thì đi qua trái.
+Rồi đó. Bạn hãy thử tự mình giải thích cách đoạn mã trên hoạt động nhé.</p>
+<h2 id="brainfuck">brainfuck</h2>
+<blockquote>
+<p>Tác giả: Urban Müller</p>
+<p>Năm ra đời: vẫn là 1993</p>
+</blockquote>
+<p>Cái tên nói lên tất cả. Ngôn ngữ này được tạo ra chỉ nhằm một mục đích
+tàn bạo là thông não cực mạnh cho người dùng.</p>
+<p>Cú pháp của <strong>brainfuck</strong> chỉ gồm 8 lệnh có dạng ký tự. Chương trình cũng
+có một đầu đọc lệnh chạy từ đầu tới cuối, nhưng là tuyến tính chứ không
+tung hoành ngang dọc như Befunge. Ngoài ra, chương trình chứa một mảng
+dữ liệu kiểu byte, truy cập bằng một con trỏ.</p>
+<p>8 lệnh gồm:</p>
+<ul>
+<li><code>&gt;</code> đẩy con trỏ qua phải</li>
+<li><code>&lt;</code> đẩy con trỏ qua trái</li>
+<li><code>+</code> cộng thêm 1 vào giá trị ở chỗ con trỏ</li>
+<li><code>-</code> trừ đi 1 từ giá trị ở chỗ con trỏ</li>
+<li><code>.</code> xuất giá trị ở chỗ trỏ ra dạng ký tự có mã tương ứng</li>
+<li><code>,</code> nhập một ký tự, quy ra mã rồi gán vào chỗ con trỏ</li>
+<li><code>[</code> nếu giá trị chỗ con trỏ khác 0 thì đi tiếp, bằng 0 thì nhảy
+tới lệnh ] tương ứng</li>
+<li><code>]</code> nếu giá trị chỗ con trỏ bằng 0 thì đi tiếp, khác 0 thì nhảy
+ngược về lệnh [ tương ứng</li>
+</ul>
+<p>Chương trình Hello World không thể loạn trí hơn:</p>
+<pre><code>++++++++++[&gt;+++++++&gt;++++++++++&gt;+++&lt;&lt;&lt;-]&gt;++.&gt;+.+++++++
+ ..+++.&gt;++.&lt;&lt;+++++++++++++++.&gt;.+++.------.--------.&gt;+.
+</code></pre><p>Mặc dù cổ quái như vậy nhưng brainfuck là một trong những esolang được
+quan tâm nhiều nhất trong giới, bởi tính đơn giản của tập lệnh và tính
+độc đáo của thiết kế. Và nếu đủ kiên nhẫn, người ta vẫn có thể viết ra
+các chương trình tính toán phức tạp. Rất nhiều esolang sau này chịu
+ảnh hưởng của brainfuck, như cái cách mà ngôn ngữ C làm nền móng cho
+các ngôn ngữ &quot;phàm tục&quot; khác.</p>
+<p>Trình dịch của ngôn ngữ nhìn như hàng rào ấp chiến lược này có kích thước
+chỉ 200 bytes.</p>
+<h2 id="whitespace">Whitespace</h2>
+<blockquote>
+<p>Tác giả: Edwin Brady &amp; Chris Morris</p>
+<p>Năm ra đời: 2002, ra mắt 2003</p>
+</blockquote>
+<p>Trong lập trình, khoảng trắng thường không đóng vai trò gì quan trọng ngoài
+việc định dạng mã nguồn cho ngay ngắn, tránh bị mấy ông senior ngồi review
+xong chửi là &quot;cái đồ viết code dơ dáy&quot;. Và nếu có coi qua Python, bạn biết
+khoảng trắng có thêm công dụng tương tự dấu ngoặc <code>{ }</code> trong họ C.</p>
+<p>Nhưng đã là gì so với <strong>Whitespace</strong>.</p>
+<p>Trong ngôn ngữ này, chỉ có 3 ký tự được sử dụng: dấu khoẳng trắng (space),
+dấu tab, dấu xuống dòng (line feed). Mọi nội dung khác đều được xem là
+comment.</p>
+<p>Chẳng hạn, chuỗi <em>space-space</em> là lệnh push một số lên stack, chuỗi
+<em>tab-space-space-space</em> là lệnh cộng hai số trên stack. Số thì điền ở
+dạng nhị phân, với <em>space</em> là 0 và <em>tab</em> là 1. Định ghi ví dụ Hello World
+nhưng chắc các bạn sẽ không thấy gì nên thôi.</p>
+<p>Không biết có ứng dụng nào thực tế hay không, nhưng có lẽ Whitespace sẽ
+chấm dứt cuộc chiến space/tab trong giới lập trình. Bởi lẽ, chỉ được xài
+có 3 ký tự thì cũng không thể nào kén cá chọn canh được.</p>
+<h2 id="piet">Piet</h2>
+<p><img src="p201225-esolang/Piet_Hello_World.gif" alt="Piet Program"></p>
+<p><a href="http://www.retas.de/thomas/computer/programs/useless/piet/explain.html">Ảnh lấy từ đây</a></p>
+<blockquote>
+<p>Tác giả: David Morgan-Mar</p>
+</blockquote>
+<p>Ngôn ngữ <strong>Piet</strong> lấy cảm hứng từ những bức tranh lập thể của họa sỹ
+<em>Piet Mondrian</em>. Hình bạn vừa thấy ở trên chính là chương trình Hello World.
+Ngạc nhiên chưa?</p>
+<p>Mã lệnh Piet hoạt động trên một bức hình 2D với các ô màu khác nhau.
+Đầu đọc lệnh di chuyển qua các ô màu và tính toán sự thay đổi về Hue
+(màu) và Lightness (độ sáng tối) để đưa ra quyết định tương ứng. Hay ghê ha!</p>
+<hr>
+<h2 id="k-t">Kết</h2>
+<p>Còn rất rất nhiều ngôn ngữ dị biệt khác mà tôi không thể kể ra hết trong
+một bài viết thế này. Cho nên nếu cảm thấy hứng thú với <em>esolang</em>, các bạn
+có thể bấm vô các đường dẫn tôi sẽ liệt kê bên dưới. Cảm ơn các bạn đã
+ghé chơi. Chào thân ái và hẹn gặp lại.</p>
+<h3 id="tham-kh-o">Tham khảo</h3>
+<ul>
+<li>Trang wiki: <a href="https://en.wikipedia.org/wiki/Esoteric_programming_language">https://en.wikipedia.org/wiki/Esoteric_programming_language</a></li>
+<li>Wiki riêng của họ hàng esolang: <a href="https://esolangs.org/wiki/Main_Page">https://esolangs.org/wiki/Main_Page</a></li>
+<li>FALSE: <a href="http://strlen.com/false-language/">http://strlen.com/false-language/</a></li>
+<li>Befunge: <a href="https://github.com/catseye/Befunge-93/blob/master/doc/Befunge-93.markdown">https://github.com/catseye/Befunge-93/blob/master/doc/Befunge-93.markdown</a></li>
+<li>Piet: <a href="https://www.dangermouse.net/esoteric/piet.html">https://www.dangermouse.net/esoteric/piet.html</a></li>
+</ul>
+
+            </div>
+        </div>
+	    <div class="footer">
+            <p>Created with <a href="http://github.com/huytd/azeroth-js">azeroth.js</a></p>
+            <div class="social">
+                <a href="https://www.facebook.com/anhdangnhat"><i class="icon-facebook-squared"></i></a>
+                <a href="https://twitter.com/anhdangnhat"><i class="icon-twitter-squared"></i></a>
+                <a href="https://www.linkedin.com/in/anhdangnhat"><i class="icon-linkedin-squared"></i></a>
+                <a href="https://github.com/alexanderdna"><i class="icon-github-squared"></i></a>
+            </div>
+        </div>
+        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            skipTags: ["script","noscript","style","textarea"]
+          }
+        });
+        </script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'Insert-Your-GA-ID-Here', 'auto');
+          ga('send', 'pageview');
+        </script>
+    </body>
+</html>
